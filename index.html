@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caesar Cipher Encrypt Chat</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .chat-container {
+            width: 400px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #2d2e30;
+            text-align: right;
+            color:#fff;
+            box-shadow: 0 0 10px #0f0f0f;
+        }
+        .chat-header {
+            background-color: #44ad53;
+            color: #fff;
+            padding: 10px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .chat-messages {
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+        }
+        .message {
+            background-color: #0f0f0f;
+            color:#fff;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+        .input-message {
+            flex: 1;
+            padding: 8px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+        }
+        .send-button {
+            margin-left: 10px;
+            color:#ddd;
+            background-color: #44ad53;
+            border: 1px solid #44ad53;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container mt-5">
+        <div class="chat-header">
+            <h2 class="text-center mb-0">Chat Room</h2>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="input-container">
+            <input type="text" class="input-message form-control" id="message-input" placeholder="Type your message">
+            <input type="text" class="input-message form-control" id="key-input" placeholder="Enter encryption key">
+            <button onclick="sendMessage()" class="send-button btn btn-primary">Send</button>
+        </div>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const keyInput = document.getElementById('key-input');
+
+        function caesarCipherEncrypt(text, shift) {
+            let encrypted = '';
+
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                if (char.match(/[a-z]/i)) {
+                    const code = text.charCodeAt(i);
+                    if (code >= 65 && code <= 90) {
+                        char = String.fromCharCode(((code - 65 + shift) % 26) + 65);
+                    } else if (code >= 97 && code <= 122) {
+                        char = String.fromCharCode(((code - 97 + shift) % 26) + 97);
+                    }
+                }
+                encrypted += char;
+            }
+
+            return encrypted;
+        }
+
+        function sendMessage() {
+            const message = messageInput.value;
+            const key = parseInt(keyInput.value);
+            if (message && !isNaN(key)) {
+                const encryptedMessage = caesarCipherEncrypt(message, key);
+                appendMessage(`You (Encrypted): ${encryptedMessage}`);
+                messageInput.value = '';
+                keyInput.value = '';
+            } else {
+                alert('Please enter both message and a valid numeric key.');
+            }
+        }
+
+        function appendMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
